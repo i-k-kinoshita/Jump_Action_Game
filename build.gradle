@@ -33,6 +33,8 @@ allprojects {
         mavenLocal()
         mavenCentral()
         google()
+        jcenter()
+        maven { url "https://maven.google.com" }
 //        maven { url "https://dl.google.com/android/repository/repository2-1.xml/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }

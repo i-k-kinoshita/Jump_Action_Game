@@ -12,14 +12,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.graphics.OrthographicCamera
+import sun.rmi.runtime.Log
 import java.util.*
+import java.util.logging.LogManager
+
 
 class GameScreen(private val mGame: Jump_Action_Game) : ScreenAdapter() {
     companion object {
         val CAMERA_WIDTH = 10f
         val CAMERA_HEIGHT = 15f
         val WORLD_WIDTH = 10f
-        val WORLD_HEIGHT = 15 * 20
+        val WORLD_HEIGHT = 15 * 2
         val GUI_WIDTH = 320f
         val GUI_HEIGHT = 480f
 
@@ -40,6 +43,7 @@ class GameScreen(private val mGame: Jump_Action_Game) : ScreenAdapter() {
     private var mRandom: Random
     private var mSteps: ArrayList<Step>
     private var mStars: ArrayList<Star>
+    private var mEnemys: ArrayList<Enemy>
     private lateinit var mUfo: Ufo
     private lateinit var mPlayer: Player
 
@@ -73,6 +77,7 @@ class GameScreen(private val mGame: Jump_Action_Game) : ScreenAdapter() {
         mRandom = Random()
         mSteps = ArrayList<Step>()
         mStars = ArrayList<Star>()
+        mEnemys = ArrayList<Enemy>()
         mGameState = GAME_STATE_READY
         mTouchPoint = Vector3()
 
@@ -121,6 +126,12 @@ class GameScreen(private val mGame: Jump_Action_Game) : ScreenAdapter() {
             mStars[i].draw(mGame.batch)
         }
 
+        // Enemy
+        for (i in 0 until mEnemys.size) {
+            mEnemys[i].draw(mGame.batch)
+
+        }
+
         // UFO
         mUfo.draw(mGame.batch)
 
@@ -151,6 +162,7 @@ class GameScreen(private val mGame: Jump_Action_Game) : ScreenAdapter() {
         val starTexture = Texture("star.png")
         val playerTexture = Texture("uma.png")
         val ufoTexture = Texture("ufo.png")
+        val enemyTexture = Texture("obstacle.png")
 
         // StepとStarをゴールの高さまで配置していく
         var y = 0f
@@ -168,6 +180,12 @@ class GameScreen(private val mGame: Jump_Action_Game) : ScreenAdapter() {
                 val star = Star(starTexture, 0, 0, 72, 72)
                 star.setPosition(step.x + mRandom.nextFloat(), step.y + Star.STAR_HEIGHT + mRandom.nextFloat() * 3)
                 mStars.add(star)
+            }
+
+            if (mRandom.nextFloat() > 0.5f) {
+                val enemy = Enemy(enemyTexture, 0, 0, 72, 72)
+                enemy.setPosition(step.x + mRandom.nextFloat(), step.y + Star.STAR_HEIGHT + mRandom.nextFloat() * 3)
+                mEnemys.add(enemy)
             }
 
             y += (maxJumpHeight - 0.5f)
